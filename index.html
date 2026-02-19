@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AusPulse — Australian Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════
+       CSS CUSTOM PROPERTIES
+    ═══════════════════════════════════════════ */
+    :root {
+      --bg-primary:      #080c18;
+      --bg-secondary:    #0c1120;
+      --bg-card:         rgba(255, 255, 255, 0.038);
+      --bg-card-hover:   rgba(255, 255, 255, 0.068);
+      --text-primary:    #e2e8f8;
+      --text-secondary:  #7a88a8;
+      --text-muted:      #3d4e6a;
+      --accent:          #00e5ff;
+      --accent-dim:      rgba(0, 229, 255, 0.12);
+      --accent-glow:     rgba(0, 229, 255, 0.18);
+      --accent-warm:     #ffab40;
+      --accent-warm-dim: rgba(255, 171, 64, 0.12);
+      --border:          rgba(255, 255, 255, 0.07);
+      --border-accent:   rgba(0, 229, 255, 0.25);
+      --shadow-card:     0 8px 32px rgba(0, 0, 0, 0.35);
+      --shadow-hover:    0 24px 64px rgba(0, 0, 0, 0.5);
+      --success:         #4ade80;
+      --error:           #f87171;
+      --radius:          16px;
+      --radius-sm:       10px;
+      --transition:      all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      background-image:
+        radial-gradient(ellipse 60% 50% at 15% 40%, rgba(0, 229, 255, 0.04) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 40% at 85% 15%, rgba(255, 171, 64, 0.04) 0%, transparent 100%),
+        radial-gradient(ellipse 40% 60% at 50% 90%, rgba(99, 102, 241, 0.03) 0%, transparent 100%);
+      background-attachment: fixed;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; }
+    img { display: block; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    /* ═══════════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════════ */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(8, 12, 24, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #00b4d8, #00e5ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+      flex-shrink: 0;
+    }
+
+    .logo-text-wrap { display: flex; flex-direction: column; gap: 1px; }
+
+    .logo-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(105deg, #ffffff 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .logo-tagline {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .updated-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .updated-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: breathe 2.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+      50%       { opacity: 0.5; box-shadow: 0 0 0 4px rgba(74, 222, 128, 0); }
+    }
+
+    .updated-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .refresh-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border-accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .refresh-btn:hover {
+      background: var(--accent-glow);
+      box-shadow: 0 0 24px rgba(0, 229, 255, 0.25);
+      transform: scale(1.08);
+    }
+
+    .refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .refresh-btn svg { transition: var(--transition); }
+
+    .refresh-btn.spinning svg {
+      animation: spin-full 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes spin-full {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    /* ═══════════════════════════════════════════
+       MAIN LAYOUT
+    ═══════════════════════════════════════════ */
+    .main {
+      padding: 20px 24px 40px;
+      max-width: 1760px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════
+       CLOCK BANNER
+    ═══════════════════════════════════════════ */
+    .clock-banner {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg,
+        rgba(0, 229, 255, 0.055) 0%,
+        rgba(255, 255, 255, 0.025) 50%,
+        rgba(255, 171, 64, 0.04) 100%);
+      border: 1px solid rgba(0, 229, 255, 0.12);
+      border-radius: var(--radius);
+      padding: 28px 36px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255,255,255,0.07);
+      animation: fade-up 0.5s ease-out both;
+    }
+
+    .clock-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 100% at 0% 50%, rgba(0, 229, 255, 0.06), transparent);
+      pointer-events: none;
+    }
+
+    .clock-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 100% at 100% 50%, rgba(255, 171, 64, 0.05), transparent);
+      pointer-events: none;
+    }
+
+    .clock-left { position: relative; z-index: 1; }
+    .clock-right { position: relative; z-index: 1; text-align: right; }
+
+    .clock-face {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .clock-seg {
+      background: linear-gradient(175deg, #ffffff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .clock-sep {
+      background: linear-gradient(175deg, #ffffff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: sep-pulse 1s ease-in-out infinite;
+      margin: 0 3px;
+      padding-bottom: 6px;
+    }
+
+    @keyframes sep-pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.12; }
+    }
+
+    .clock-ampm {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1rem, 1.8vw, 1.6rem);
+      font-weight: 600;
+      color: var(--accent);
+      align-self: flex-end;
+      padding-bottom: 8px;
+      margin-left: 8px;
+      opacity: 0.8;
+    }
+
+    .clock-date {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1rem, 1.8vw, 1.35rem);
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .tz-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0, 229, 255, 0.22);
+      border-radius: 20px;
+      padding: 3px 11px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════
+       DASHBOARD GRID
+    ═══════════════════════════════════════════ */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      gap: 20px;
+    }
+
+    .span-full { grid-column: 1 / -1; }
+
+    /* ═══════════════════════════════════════════
+       CARD BASE
+    ═══════════════════════════════════════════ */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition: var(--transition);
+      animation: fade-up 0.55s ease-out both;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow-hover), 0 0 0 1px rgba(0, 229, 255, 0.06);
+      transform: scale(1.012) translateY(-3px);
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-head {
+      padding: 18px 20px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 0 20px;
+    }
+
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .badge-cyan {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+    }
+
+    .badge-amber {
+      background: var(--accent-warm-dim);
+      color: var(--accent-warm);
+      border: 1px solid rgba(255, 171, 64, 0.2);
+    }
+
+    /* ═══════════════════════════════════════════
+       WEATHER WIDGET
+    ═══════════════════════════════════════════ */
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+      padding: 0 16px 18px;
+    }
+
+    .city-card {
+      background: rgba(255, 255, 255, 0.028);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 8px 12px;
+      text-align: center;
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .city-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 100% 80% at 50% 0%, rgba(0, 229, 255, 0.04), transparent);
+      pointer-events: none;
+    }
+
+    .city-card:hover {
+      background: rgba(255, 255, 255, 0.055);
+      border-color: rgba(255, 255, 255, 0.14);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .city-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .city-icon {
+      font-size: 1.85rem;
+      display: block;
+      margin-bottom: 8px;
+      animation: float-icon 4s ease-in-out infinite;
+    }
+
+    @keyframes float-icon {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-5px); }
+    }
+
+    .city-card:nth-child(2n)   .city-icon { animation-delay: -0.8s; }
+    .city-card:nth-child(3n)   .city-icon { animation-delay: -1.6s; }
+    .city-card:nth-child(4n)   .city-icon { animation-delay: -2.4s; }
+    .city-card:nth-child(5n)   .city-icon { animation-delay: -3.2s; }
+
+    .city-temp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .city-condition {
+      font-size: 0.6rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+      margin-bottom: 8px;
+      min-height: 2em;
+    }
+
+    .city-stats {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .city-stat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    /* Temperature gradient classes */
+    .t-frozen   { color: #93c5fd; }
+    .t-cold     { color: #60a5fa; }
+    .t-cool     { color: #34d399; }
+    .t-mild     { color: #a3e635; }
+    .t-warm     { color: #fbbf24; }
+    .t-hot      { color: #f97316; }
+    .t-scorching{ color: #ef4444; }
+
+    /* ═══════════════════════════════════════════
+       NEWS FEED
+    ═══════════════════════════════════════════ */
+    .news-scroll {
+      max-height: 560px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+
+    .news-list {
+      padding: 6px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .news-item {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      padding: 9px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0;
+      animation: news-in 0.4s ease-out forwards;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .news-item:hover {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: var(--border);
+      transform: translateX(5px);
+    }
+
+    @keyframes news-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .news-thumb-wrap {
+      position: relative;
+      width: 62px;
+      height: 62px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .news-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .news-thumb-placeholder {
+      width: 62px;
+      height: 62px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.07), rgba(255, 171, 64, 0.05));
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .news-body { flex: 1; min-width: 0; }
+
+    .news-headline {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.4;
+      margin-bottom: 7px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .news-item:hover .news-headline { color: #ffffff; }
+
+    .news-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .news-source {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .news-source.au { color: var(--accent-warm); }
+
+    .news-dot {
+      color: var(--text-muted);
+      font-size: 0.65rem;
+    }
+
+    .news-time {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       SKELETON / SHIMMER
+    ═══════════════════════════════════════════ */
+    .sk {
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.03) 0%,
+        rgba(255,255,255,0.08) 50%,
+        rgba(255,255,255,0.03) 100%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.6s ease-in-out infinite;
+      border-radius: 5px;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position:  200% 0; }
+    }
+
+    .sk-news-item {
+      display: flex;
+      gap: 11px;
+      padding: 9px 8px;
+      align-items: flex-start;
+    }
+
+    .sk-thumb { width: 62px; height: 62px; border-radius: 8px; flex-shrink: 0; }
+    .sk-content { flex: 1; display: flex; flex-direction: column; gap: 7px; padding-top: 3px; }
+    .sk-line { height: 12px; }
+    .sk-line-sm { height: 10px; width: 38%; }
+
+    .sk-city {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 8px 12px;
+    }
+
+    .sk-city-name { height: 9px; width: 65%; border-radius: 4px; }
+    .sk-city-icon { height: 32px; width: 32px; border-radius: 50%; }
+    .sk-city-temp { height: 18px; width: 52%; border-radius: 4px; }
+    .sk-city-cond { height: 9px; width: 72%; border-radius: 4px; }
+    .sk-city-stats { display: flex; gap: 6px; justify-content: center; }
+    .sk-city-stat { height: 9px; width: 28%; border-radius: 4px; }
+
+    /* ═══════════════════════════════════════════
+       ERROR STATE
+    ═══════════════════════════════════════════ */
+    .error-state {
+      padding: 36px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .error-icon { font-size: 2.4rem; }
+
+    .error-msg {
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .retry-btn {
+      margin-top: 4px;
+      background: var(--accent-dim);
+      border: 1px solid var(--border-accent);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      padding: 7px 18px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .retry-btn:hover {
+      background: var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ═══════════════════════════════════════════
+       STAGGER DELAYS
+    ═══════════════════════════════════════════ */
+    #weather-card   { animation-delay: 0.08s; }
+    #global-card    { animation-delay: 0.18s; }
+    #au-card        { animation-delay: 0.28s; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .weather-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .main { padding: 14px 16px 32px; }
+
+      .clock-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 14px;
+        padding: 22px 20px;
+      }
+
+      .clock-right { text-align: center; }
+
+      .dashboard-grid { grid-template-columns: 1fr; }
+
+      .weather-grid { grid-template-columns: repeat(4, 1fr); }
+
+      .updated-pill { display: none; }
+    }
+
+    @media (max-width: 520px) {
+      .weather-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1400px) {
+      .weather-grid { grid-template-columns: repeat(8, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ HEADER ═══════════════ -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-mark">⚡</div>
+      <div class="logo-text-wrap">
+        <div class="logo-name">AusPulse</div>
+        <div class="logo-tagline">Live Australian Dashboard</div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="updated-pill">
+        <div class="updated-dot"></div>
+        <span class="updated-text" id="updated-time">Fetching data…</span>
+      </div>
+      <button class="refresh-btn" id="refresh-btn" title="Refresh all data" aria-label="Refresh all data">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6"/>
+          <path d="M21.34 15.57a10 10 0 1 1-.57-8.38"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════════════ MAIN ═══════════════ -->
+  <main class="main">
+
+    <!-- CLOCK BANNER -->
+    <div class="clock-banner">
+      <div class="clock-left">
+        <div class="clock-face">
+          <span class="clock-seg" id="ch">00</span>
+          <span class="clock-sep">:</span>
+          <span class="clock-seg" id="cm">00</span>
+          <span class="clock-sep">:</span>
+          <span class="clock-seg" id="cs">00</span>
+          <span class="clock-ampm" id="ca">AM</span>
+        </div>
+      </div>
+      <div class="clock-right">
+        <div class="clock-date" id="clock-date">Loading…</div>
+        <div class="tz-badge">🇦🇺 AEST/AEDT — Sydney</div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD GRID -->
+    <div class="dashboard-grid">
+
+      <!-- WEATHER -->
+      <div class="card span-full" id="weather-card">
+        <div class="card-head">
+          <div class="card-title">
+            <span>🌤️</span> Australian Cities — Live Weather
+          </div>
+          <span class="badge badge-cyan">Open-Meteo</span>
+        </div>
+        <div class="card-sep"></div>
+        <div id="weather-body"></div>
+      </div>
+
+      <!-- GLOBAL NEWS -->
+      <div class="card" id="global-card">
+        <div class="card-head">
+          <div class="card-title">
+            <span>🌐</span> Global Headlines
+          </div>
+          <span class="badge badge-cyan">BBC World</span>
+        </div>
+        <div class="card-sep"></div>
+        <div class="news-scroll">
+          <div class="news-list" id="global-list"></div>
+        </div>
+      </div>
+
+      <!-- AUSTRALIAN NEWS -->
+      <div class="card" id="au-card">
+        <div class="card-head">
+          <div class="card-title">
+            <span>🇦🇺</span> Australia News
+          </div>
+          <span class="badge badge-amber">ABC News AU</span>
+        </div>
+        <div class="card-sep"></div>
+        <div class="news-scroll">
+          <div class="news-list" id="au-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    /* ═══════════════════════════════════════════
+       CONSTANTS
+    ═══════════════════════════════════════════ */
+    const CITIES = [
+      { name: 'Sydney',    lat: -33.8688, lon: 151.2093 },
+      { name: 'Melbourne', lat: -37.8136, lon: 144.9631 },
+      { name: 'Brisbane',  lat: -27.4698, lon: 153.0251 },
+      { name: 'Perth',     lat: -31.9505, lon: 115.8605 },
+      { name: 'Adelaide',  lat: -34.9285, lon: 138.6007 },
+      { name: 'Hobart',    lat: -42.8821, lon: 147.3272 },
+      { name: 'Darwin',    lat: -12.4634, lon: 130.8456 },
+      { name: 'Canberra',  lat: -35.2809, lon: 149.1300 },
+    ];
+
+    const GLOBAL_RSS = 'https://feeds.bbci.co.uk/news/world/rss.xml';
+    const AU_RSS     = 'https://www.abc.net.au/news/feed/51120/rss.xml';
+    const RSS2JSON   = 'https://api.rss2json.com/v1/api.json';
+
+    /* ═══════════════════════════════════════════
+       WEATHER UTILITIES
+    ═══════════════════════════════════════════ */
+    const WMO = {
+      0:  ['☀️',  'Clear sky'],
+      1:  ['🌤️', 'Mainly clear'],
+      2:  ['⛅',  'Partly cloudy'],
+      3:  ['☁️',  'Overcast'],
+      45: ['🌫️', 'Foggy'],
+      48: ['🌫️', 'Rime fog'],
+      51: ['🌦️', 'Light drizzle'],
+      53: ['🌦️', 'Drizzle'],
+      55: ['🌦️', 'Heavy drizzle'],
+      56: ['🌨️', 'Freezing drizzle'],
+      57: ['🌨️', 'Heavy fr. drizzle'],
+      61: ['🌧️', 'Light rain'],
+      63: ['🌧️', 'Rain'],
+      65: ['🌧️', 'Heavy rain'],
+      66: ['🌨️', 'Freezing rain'],
+      67: ['🌨️', 'Heavy fr. rain'],
+      71: ['❄️',  'Light snow'],
+      73: ['❄️',  'Snowfall'],
+      75: ['❄️',  'Heavy snow'],
+      77: ['❄️',  'Snow grains'],
+      80: ['🌧️', 'Light showers'],
+      81: ['🌧️', 'Rain showers'],
+      82: ['🌧️', 'Heavy showers'],
+      85: ['🌨️', 'Snow showers'],
+      86: ['🌨️', 'Heavy snow shwrs'],
+      95: ['⛈️',  'Thunderstorm'],
+      96: ['⛈️',  'T-storm + hail'],
+      99: ['⛈️',  'Severe T-storm'],
+    };
+
+    function wmoInfo(code) {
+      return WMO[code] ?? ['🌡️', 'Unknown'];
+    }
+
+    function tempClass(t) {
+      if (t <= 0)  return 't-frozen';
+      if (t <= 8)  return 't-cold';
+      if (t <= 15) return 't-cool';
+      if (t <= 22) return 't-mild';
+      if (t <= 28) return 't-warm';
+      if (t <= 35) return 't-hot';
+      return 't-scorching';
+    }
+
+    /* ═══════════════════════════════════════════
+       GENERAL UTILITIES
+    ═══════════════════════════════════════════ */
+    function esc(str) {
+      if (!str) return '';
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    function relTime(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      if (isNaN(d)) return '';
+      const diff = Date.now() - d.getTime();
+      const m = Math.floor(diff / 60000);
+      if (m < 1)  return 'Just now';
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      const dy = Math.floor(h / 24);
+      return `${dy}d ago`;
+    }
+
+    /* ═══════════════════════════════════════════
+       CLOCK
+    ═══════════════════════════════════════════ */
+    const TZ = 'Australia/Sydney';
+    const CH = document.getElementById('ch');
+    const CM = document.getElementById('cm');
+    const CS = document.getElementById('cs');
+    const CA = document.getElementById('ca');
+    const CD = document.getElementById('clock-date');
+
+    function tickClock() {
+      const now = new Date();
+
+      const timeParts = new Intl.DateTimeFormat('en-AU', {
+        timeZone: TZ,
+        hour:   '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      }).formatToParts(now);
+
+      const get = (t) => timeParts.find(p => p.type === t)?.value ?? '00';
+
+      CH.textContent = get('hour');
+      CM.textContent = get('minute');
+      CS.textContent = get('second');
+      CA.textContent = get('dayPeriod');
+
+      CD.textContent = new Intl.DateTimeFormat('en-AU', {
+        timeZone: TZ,
+        weekday: 'long',
+        day:     'numeric',
+        month:   'long',
+        year:    'numeric',
+      }).format(now);
+    }
+
+    tickClock();
+    setInterval(tickClock, 1000);
+
+    /* ═══════════════════════════════════════════
+       SKELETON BUILDERS
+    ═══════════════════════════════════════════ */
+    function buildNewsSkeleton(n = 7) {
+      return Array.from({ length: n }, (_, i) => `
+        <div class="sk-news-item">
+          <div class="sk sk-thumb"></div>
+          <div class="sk-content">
+            <div class="sk sk-line" style="width:${82 + (i % 3) * 6}%"></div>
+            <div class="sk sk-line" style="width:${58 + (i % 4) * 8}%"></div>
+            <div class="sk sk-line-sm sk"></div>
+          </div>
+        </div>`).join('');
+    }
+
+    function buildWeatherSkeleton() {
+      const cell = `
+        <div class="city-card sk-city">
+          <div class="sk sk-city-name"></div>
+          <div class="sk sk-city-icon"></div>
+          <div class="sk sk-city-temp"></div>
+          <div class="sk sk-city-cond"></div>
+          <div class="sk-city-stats">
+            <div class="sk sk-city-stat"></div>
+            <div class="sk sk-city-stat"></div>
+          </div>
+        </div>`;
+      return `<div class="weather-grid">${cell.repeat(8)}</div>`;
+    }
+
+    /* ═══════════════════════════════════════════
+       WEATHER
+    ═══════════════════════════════════════════ */
+    async function loadWeather() {
+      const body = document.getElementById('weather-body');
+      body.innerHTML = buildWeatherSkeleton();
+
+      const results = await Promise.allSettled(
+        CITIES.map(city => {
+          const url = `https://api.open-meteo.com/v1/forecast` +
+            `?latitude=${city.lat}&longitude=${city.lon}` +
+            `&current=temperature_2m,weathercode,windspeed_10m,relative_humidity_2m` +
+            `&timezone=auto`;
+          return fetch(url)
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(data => ({ city, data }));
+        })
+      );
+
+      const cells = results.map((r, i) => {
+        const city = CITIES[i];
+        if (r.status === 'rejected' || !r.value?.data?.current) {
+          return `
+            <div class="city-card" style="justify-content:center;display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div class="city-name">${city.name}</div>
+              <span style="font-size:1.6rem">😶‍🌫️</span>
+              <div style="font-size:0.63rem;color:var(--error)">Unavailable</div>
+            </div>`;
+        }
+
+        const cur   = r.value.data.current;
+        const temp  = Math.round(cur.temperature_2m);
+        const wind  = Math.round(cur.windspeed_10m);
+        const hum   = Math.round(cur.relative_humidity_2m);
+        const [icon, label] = wmoInfo(cur.weathercode);
+        const tcls  = tempClass(temp);
+
+        return `
+          <div class="city-card">
+            <div class="city-name">${city.name}</div>
+            <span class="city-icon">${icon}</span>
+            <div class="city-temp ${tcls}">${temp}°</div>
+            <div class="city-condition">${label}</div>
+            <div class="city-stats">
+              <span class="city-stat" title="Wind speed">💨 ${wind}</span>
+              <span class="city-stat" title="Humidity">💧 ${hum}%</span>
+            </div>
+          </div>`;
+      });
+
+      body.innerHTML = `<div class="weather-grid">${cells.join('')}</div>`;
+    }
+
+    /* ═══════════════════════════════════════════
+       NEWS
+    ═══════════════════════════════════════════ */
+    async function loadNews(rssUrl, listId, isAu) {
+      const list = document.getElementById(listId);
+      list.innerHTML = buildNewsSkeleton(7);
+
+      const apiUrl = `${RSS2JSON}?rss_url=${encodeURIComponent(rssUrl)}&count=10`;
+
+      try {
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+
+        if (json.status !== 'ok' || !json.items?.length) {
+          throw new Error('Feed returned no items');
+        }
+
+        const feedTitle = json.feed?.title || (isAu ? 'ABC News' : 'BBC News');
+        // Shorten feed title for display
+        const source = feedTitle
+          .replace(/^BBC News\s*[–\-]\s*/i, '')
+          .replace(/\s*[–\-]\s*RSS Feed$/i, '')
+          .trim() || (isAu ? 'ABC News' : 'BBC News');
+
+        const items = json.items.slice(0, 10);
+        list.innerHTML = '';
+
+        items.forEach((article, idx) => {
+          const a = document.createElement('a');
+          a.href = article.link || '#';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.className = 'news-item';
+          a.style.animationDelay = `${idx * 55}ms`;
+
+          // Thumbnail
+          const thumbSrc = article.thumbnail ||
+            (article.enclosure?.type?.startsWith('image') ? article.enclosure.link : null);
+
+          const thumbWrap = document.createElement('div');
+          if (thumbSrc) {
+            thumbWrap.className = 'news-thumb-wrap';
+            const img = document.createElement('img');
+            img.className = 'news-thumb';
+            img.src = thumbSrc;
+            img.alt = '';
+            img.loading = 'lazy';
+            img.onerror = () => {
+              const ph = document.createElement('div');
+              ph.className = 'news-thumb-placeholder';
+              ph.textContent = isAu ? '🇦🇺' : '🌐';
+              img.replaceWith(ph);
+            };
+            thumbWrap.appendChild(img);
+          } else {
+            thumbWrap.className = 'news-thumb-placeholder';
+            thumbWrap.textContent = isAu ? '🇦🇺' : '🌐';
+          }
+
+          // Content
+          const body = document.createElement('div');
+          body.className = 'news-body';
+
+          const headline = document.createElement('div');
+          headline.className = 'news-headline';
+          headline.textContent = article.title || 'Untitled';
+
+          const meta = document.createElement('div');
+          meta.className = 'news-meta';
+
+          const srcSpan = document.createElement('span');
+          srcSpan.className = `news-source${isAu ? ' au' : ''}`;
+          srcSpan.textContent = source;
+
+          const t = relTime(article.pubDate);
+          if (t) {
+            const dot  = document.createElement('span');
+            dot.className = 'news-dot';
+            dot.textContent = '·';
+            const time = document.createElement('span');
+            time.className = 'news-time';
+            time.textContent = t;
+            meta.append(srcSpan, dot, time);
+          } else {
+            meta.append(srcSpan);
+          }
+
+          body.append(headline, meta);
+          a.append(thumbWrap, body);
+          list.appendChild(a);
+        });
+
+      } catch (err) {
+        console.warn('News load failed:', rssUrl, err);
+        list.innerHTML = `
+          <div class="error-state">
+            <div class="error-icon">${isAu ? '📰' : '🌐'}</div>
+            <p class="error-msg">
+              Unable to load ${isAu ? 'Australian' : 'global'} news.<br>
+              Check your connection and try again.
+            </p>
+            <button class="retry-btn"
+              onclick="loadNews('${rssUrl}', '${listId}', ${isAu})">
+              ↻ Retry
+            </button>
+          </div>`;
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       REFRESH & AUTO-REFRESH
+    ═══════════════════════════════════════════ */
+    const refreshBtn = document.getElementById('refresh-btn');
+    const updatedEl  = document.getElementById('updated-time');
+    let refreshing = false;
+
+    function stampNow() {
+      const t = new Intl.DateTimeFormat('en-AU', {
+        timeZone: TZ,
+        hour:   '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      }).format(new Date());
+      updatedEl.textContent = `Updated ${t}`;
+    }
+
+    async function refreshAll() {
+      if (refreshing) return;
+      refreshing = true;
+      refreshBtn.disabled = true;
+      refreshBtn.classList.add('spinning');
+
+      try {
+        await Promise.allSettled([
+          loadWeather(),
+          loadNews(GLOBAL_RSS, 'global-list', false),
+          loadNews(AU_RSS,     'au-list',     true),
+        ]);
+        stampNow();
+      } finally {
+        refreshing = false;
+        setTimeout(() => {
+          refreshBtn.disabled = false;
+          refreshBtn.classList.remove('spinning');
+        }, 800);
+      }
+    }
+
+    refreshBtn.addEventListener('click', refreshAll);
+    setInterval(refreshAll, 10 * 60 * 1000); // auto-refresh every 10 min
+
+    /* ═══════════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════════ */
+    refreshAll();
+  </script>
+</body>
+</html>
