@@ -750,7 +750,7 @@
     ═══════════════════════════════════════════ */
     .currency-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(8, 1fr);
       gap: 10px;
       padding: 0 16px 18px;
     }
@@ -950,7 +950,7 @@
 
     @media (min-width: 1400px) {
       .weather-grid  { grid-template-columns: repeat(8, 1fr); }
-      .currency-grid { grid-template-columns: repeat(7, 1fr); }
+      .currency-grid { grid-template-columns: repeat(8, 1fr); }
     }
   </style>
 </head>
@@ -1114,6 +1114,7 @@
       { code: 'EUR', flag: '🇪🇺', name: 'Euro'        },
       { code: 'GBP', flag: '🇬🇧', name: 'Pound'       },
       { code: 'JPY', flag: '🇯🇵', name: 'Yen'         },
+      { code: 'INR', flag: '🇮🇳', name: 'Rupee'       },
       { code: 'NZD', flag: '🇳🇿', name: 'NZ Dollar'  },
       { code: 'SGD', flag: '🇸🇬', name: 'SG Dollar'  },
       { code: 'CNY', flag: '🇨🇳', name: 'Yuan'        },
@@ -1471,7 +1472,7 @@
           <div class="sk sk-currency-rate"></div>
           <div class="sk sk-currency-label"></div>
         </div>`;
-      return `<div class="currency-grid">${item.repeat(7)}</div>`;
+      return `<div class="currency-grid">${item.repeat(8)}</div>`;
     }
 
     async function loadCurrency() {
@@ -1486,7 +1487,7 @@
 
         const cells = CURRENCIES.map(cur => {
           const rate = rates[cur.code];
-          const fmt  = (cur.code === 'JPY' || cur.code === 'CNY')
+          const fmt  = (cur.code === 'JPY' || cur.code === 'CNY' || cur.code === 'INR')
             ? rate.toFixed(2)
             : rate.toFixed(4);
           return `
