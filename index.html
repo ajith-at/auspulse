@@ -999,7 +999,7 @@
       </div>
       <div class="clock-right">
         <div class="clock-date" id="clock-date">Loading…</div>
-        <div class="tz-badge">🇦🇺 AEST/AEDT — Sydney</div>
+        <div class="tz-badge">🇦🇺 AEST/AEDT — Melbourne</div>
         <div class="sun-times" id="sun-times" style="opacity:0">
           <div class="sun-item">
             <span class="sun-icon">🌅</span>
@@ -1105,9 +1105,9 @@
     const CURRENCY_API = 'https://api.frankfurter.app/latest';
     const HOLIDAYS_API = 'https://date.nager.at/api/v3/PublicHolidays';
 
-    // Sydney coords for sunrise/sunset
-    const SYD_LAT = -33.8688;
-    const SYD_LON = 151.2093;
+    // Melbourne coords for sunrise/sunset
+    const SYD_LAT = -37.8136;
+    const SYD_LON = 144.9631;
 
     const CURRENCIES = [
       { code: 'USD', flag: '🇺🇸', name: 'US Dollar'  },
@@ -1202,7 +1202,7 @@
     /* ═══════════════════════════════════════════
        CLOCK
     ═══════════════════════════════════════════ */
-    const TZ = 'Australia/Sydney';
+    const TZ = 'Australia/Melbourne';
     const CH = document.getElementById('ch');
     const CM = document.getElementById('cm');
     const CS = document.getElementById('cs');
