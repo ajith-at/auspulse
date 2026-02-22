@@ -706,17 +706,219 @@
     }
 
     /* ═══════════════════════════════════════════
+       SUN TIMES (clock banner)
+    ═══════════════════════════════════════════ */
+    .sun-times {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      transition: opacity 0.4s ease;
+    }
+
+    .sun-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .sun-icon { font-size: 0.95rem; }
+    .sun-val  { color: var(--accent-warm); font-weight: 600; }
+    .sun-sep  { color: var(--text-muted); }
+
+    /* ═══════════════════════════════════════════
+       WEATHER ENHANCEMENTS
+    ═══════════════════════════════════════════ */
+    .city-feels {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .uv-low       { color: #4ade80; }
+    .uv-moderate  { color: #fbbf24; }
+    .uv-high      { color: #f97316; }
+    .uv-very-high { color: #ef4444; }
+    .uv-extreme   { color: #a855f7; }
+
+    /* ═══════════════════════════════════════════
+       CURRENCY CARD
+    ═══════════════════════════════════════════ */
+    .currency-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      padding: 0 16px 18px;
+    }
+
+    .currency-item {
+      background: rgba(255, 255, 255, 0.028);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 10px 14px;
+      text-align: center;
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .currency-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 100% 80% at 50% 0%, rgba(255, 171, 64, 0.04), transparent);
+      pointer-events: none;
+    }
+
+    .currency-item:hover {
+      background: rgba(255, 255, 255, 0.055);
+      border-color: rgba(255, 255, 255, 0.14);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .currency-flag { font-size: 1.7rem; margin-bottom: 8px; display: block; }
+
+    .currency-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .currency-rate {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-warm);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .currency-label { font-size: 0.58rem; color: var(--text-muted); }
+
+    .sk-currency-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 10px 14px;
+    }
+
+    .sk-currency-flag  { height: 28px; width: 28px; border-radius: 50%; }
+    .sk-currency-code  { height: 9px;  width: 55%; border-radius: 4px; }
+    .sk-currency-rate  { height: 16px; width: 70%; border-radius: 4px; }
+    .sk-currency-label { height: 9px;  width: 60%; border-radius: 4px; }
+
+    /* ═══════════════════════════════════════════
+       PUBLIC HOLIDAYS CARD
+    ═══════════════════════════════════════════ */
+    .holidays-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 0 16px 18px;
+    }
+
+    .holiday-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.022);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      opacity: 0;
+      animation: news-in 0.4s ease-out forwards;
+    }
+
+    .holiday-item:hover {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(4px);
+    }
+
+    .holiday-countdown {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 60px;
+      text-align: center;
+      padding: 4px 8px;
+      background: var(--accent-dim);
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .holiday-countdown.today {
+      color: var(--accent-warm);
+      background: var(--accent-warm-dim);
+    }
+
+    .holiday-info { flex: 1; min-width: 0; }
+
+    .holiday-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .holiday-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.63rem;
+      color: var(--text-muted);
+    }
+
+    .holiday-scope {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .holiday-scope.national {
+      background: var(--accent-warm-dim);
+      color: var(--accent-warm);
+      border-color: rgba(255, 171, 64, 0.2);
+    }
+
+    /* ═══════════════════════════════════════════
        STAGGER DELAYS
     ═══════════════════════════════════════════ */
     #weather-card   { animation-delay: 0.08s; }
-    #global-card    { animation-delay: 0.18s; }
-    #au-card        { animation-delay: 0.28s; }
+    #currency-card  { animation-delay: 0.16s; }
+    #global-card    { animation-delay: 0.24s; }
+    #au-card        { animation-delay: 0.32s; }
+    #holidays-card  { animation-delay: 0.40s; }
 
     /* ═══════════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════════ */
     @media (max-width: 1100px) {
-      .weather-grid { grid-template-columns: repeat(4, 1fr); }
+      .weather-grid  { grid-template-columns: repeat(4, 1fr); }
+      .currency-grid { grid-template-columns: repeat(4, 1fr); }
+      .holidays-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
@@ -730,20 +932,25 @@
       }
 
       .clock-right { text-align: center; }
+      .sun-times   { justify-content: center; }
 
       .dashboard-grid { grid-template-columns: 1fr; }
 
-      .weather-grid { grid-template-columns: repeat(4, 1fr); }
+      .weather-grid  { grid-template-columns: repeat(4, 1fr); }
+      .currency-grid { grid-template-columns: repeat(4, 1fr); }
+      .holidays-grid { grid-template-columns: 1fr; }
 
       .updated-pill { display: none; }
     }
 
     @media (max-width: 520px) {
-      .weather-grid { grid-template-columns: repeat(2, 1fr); }
+      .weather-grid  { grid-template-columns: repeat(2, 1fr); }
+      .currency-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (min-width: 1400px) {
-      .weather-grid { grid-template-columns: repeat(8, 1fr); }
+      .weather-grid  { grid-template-columns: repeat(8, 1fr); }
+      .currency-grid { grid-template-columns: repeat(7, 1fr); }
     }
   </style>
 </head>
@@ -793,6 +1000,17 @@
       <div class="clock-right">
         <div class="clock-date" id="clock-date">Loading…</div>
         <div class="tz-badge">🇦🇺 AEST/AEDT — Sydney</div>
+        <div class="sun-times" id="sun-times" style="opacity:0">
+          <div class="sun-item">
+            <span class="sun-icon">🌅</span>
+            <span class="sun-val" id="sun-rise">--:--</span>
+          </div>
+          <span class="sun-sep">·</span>
+          <div class="sun-item">
+            <span class="sun-icon">🌇</span>
+            <span class="sun-val" id="sun-set">--:--</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -809,6 +1027,18 @@
         </div>
         <div class="card-sep"></div>
         <div id="weather-body"></div>
+      </div>
+
+      <!-- CURRENCY EXCHANGE RATES -->
+      <div class="card span-full" id="currency-card">
+        <div class="card-head">
+          <div class="card-title">
+            <span>💱</span> AUD Exchange Rates
+          </div>
+          <span class="badge badge-amber">Frankfurter</span>
+        </div>
+        <div class="card-sep"></div>
+        <div id="currency-body"></div>
       </div>
 
       <!-- GLOBAL NEWS -->
@@ -839,6 +1069,18 @@
         </div>
       </div>
 
+      <!-- PUBLIC HOLIDAYS -->
+      <div class="card span-full" id="holidays-card">
+        <div class="card-head">
+          <div class="card-title">
+            <span>📅</span> Upcoming Public Holidays
+          </div>
+          <span class="badge badge-cyan">Australia</span>
+        </div>
+        <div class="card-sep"></div>
+        <div id="holidays-body"></div>
+      </div>
+
     </div>
   </main>
 
@@ -857,9 +1099,25 @@
       { name: 'Canberra',  lat: -35.2809, lon: 149.1300 },
     ];
 
-    const GLOBAL_RSS = 'https://feeds.bbci.co.uk/news/world/rss.xml';
-    const AU_RSS     = 'https://www.abc.net.au/news/feed/51120/rss.xml';
-    const RSS2JSON   = 'https://api.rss2json.com/v1/api.json';
+    const GLOBAL_RSS  = 'https://feeds.bbci.co.uk/news/world/rss.xml';
+    const AU_RSS      = 'https://www.abc.net.au/news/feed/51120/rss.xml';
+    const RSS2JSON    = 'https://api.rss2json.com/v1/api.json';
+    const CURRENCY_API = 'https://api.frankfurter.app/latest';
+    const HOLIDAYS_API = 'https://date.nager.at/api/v3/PublicHolidays';
+
+    // Sydney coords for sunrise/sunset
+    const SYD_LAT = -33.8688;
+    const SYD_LON = 151.2093;
+
+    const CURRENCIES = [
+      { code: 'USD', flag: '🇺🇸', name: 'US Dollar'  },
+      { code: 'EUR', flag: '🇪🇺', name: 'Euro'        },
+      { code: 'GBP', flag: '🇬🇧', name: 'Pound'       },
+      { code: 'JPY', flag: '🇯🇵', name: 'Yen'         },
+      { code: 'NZD', flag: '🇳🇿', name: 'NZ Dollar'  },
+      { code: 'SGD', flag: '🇸🇬', name: 'SG Dollar'  },
+      { code: 'CNY', flag: '🇨🇳', name: 'Yuan'        },
+    ];
 
     /* ═══════════════════════════════════════════
        WEATHER UTILITIES
@@ -907,6 +1165,14 @@
       if (t <= 28) return 't-warm';
       if (t <= 35) return 't-hot';
       return 't-scorching';
+    }
+
+    function uvClass(uv) {
+      if (uv <= 2)  return 'uv-low';
+      if (uv <= 5)  return 'uv-moderate';
+      if (uv <= 7)  return 'uv-high';
+      if (uv <= 10) return 'uv-very-high';
+      return 'uv-extreme';
     }
 
     /* ═══════════════════════════════════════════
@@ -994,8 +1260,10 @@
           <div class="sk sk-city-name"></div>
           <div class="sk sk-city-icon"></div>
           <div class="sk sk-city-temp"></div>
+          <div class="sk sk-city-cond" style="width:50%;margin-bottom:2px"></div>
           <div class="sk sk-city-cond"></div>
           <div class="sk-city-stats">
+            <div class="sk sk-city-stat"></div>
             <div class="sk sk-city-stat"></div>
             <div class="sk sk-city-stat"></div>
           </div>
@@ -1014,7 +1282,7 @@
         CITIES.map(city => {
           const url = `https://api.open-meteo.com/v1/forecast` +
             `?latitude=${city.lat}&longitude=${city.lon}` +
-            `&current=temperature_2m,weathercode,windspeed_10m,relative_humidity_2m` +
+            `&current=temperature_2m,apparent_temperature,weathercode,windspeed_10m,relative_humidity_2m,uv_index` +
             `&timezone=auto`;
           return fetch(url)
             .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
@@ -1035,20 +1303,25 @@
 
         const cur   = r.value.data.current;
         const temp  = Math.round(cur.temperature_2m);
+        const feels = Math.round(cur.apparent_temperature);
         const wind  = Math.round(cur.windspeed_10m);
         const hum   = Math.round(cur.relative_humidity_2m);
+        const uv    = Math.round(cur.uv_index ?? 0);
         const [icon, label] = wmoInfo(cur.weathercode);
         const tcls  = tempClass(temp);
+        const uvcls = uvClass(uv);
 
         return `
           <div class="city-card">
             <div class="city-name">${city.name}</div>
             <span class="city-icon">${icon}</span>
             <div class="city-temp ${tcls}">${temp}°</div>
+            <div class="city-feels">Feels ${feels}°</div>
             <div class="city-condition">${label}</div>
             <div class="city-stats">
               <span class="city-stat" title="Wind speed">💨 ${wind}</span>
               <span class="city-stat" title="Humidity">💧 ${hum}%</span>
+              <span class="city-stat ${uvcls}" title="UV Index">UV&nbsp;${uv}</span>
             </div>
           </div>`;
       });
@@ -1167,6 +1440,158 @@
     }
 
     /* ═══════════════════════════════════════════
+       SUNRISE / SUNSET
+    ═══════════════════════════════════════════ */
+    async function loadSunTimes() {
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast` +
+          `?latitude=${SYD_LAT}&longitude=${SYD_LON}` +
+          `&daily=sunrise,sunset&timezone=${encodeURIComponent(TZ)}&forecast_days=1`;
+        const res  = await fetch(url);
+        if (!res.ok) throw new Error(res.status);
+        const data = await res.json();
+        const rise = data.daily.sunrise[0].split('T')[1];
+        const set  = data.daily.sunset[0].split('T')[1];
+        document.getElementById('sun-rise').textContent = rise;
+        document.getElementById('sun-set').textContent  = set;
+        document.getElementById('sun-times').style.opacity = '1';
+      } catch (_) {
+        document.getElementById('sun-times').style.opacity = '0.35';
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       CURRENCY EXCHANGE RATES
+    ═══════════════════════════════════════════ */
+    function buildCurrencySkeleton() {
+      const item = `
+        <div class="currency-item sk-currency-item">
+          <div class="sk sk-currency-flag"></div>
+          <div class="sk sk-currency-code"></div>
+          <div class="sk sk-currency-rate"></div>
+          <div class="sk sk-currency-label"></div>
+        </div>`;
+      return `<div class="currency-grid">${item.repeat(7)}</div>`;
+    }
+
+    async function loadCurrency() {
+      const body = document.getElementById('currency-body');
+      body.innerHTML = buildCurrencySkeleton();
+      try {
+        const codes = CURRENCIES.map(c => c.code).join(',');
+        const res   = await fetch(`${CURRENCY_API}?from=AUD&to=${codes}`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data  = await res.json();
+        const rates = data.rates;
+
+        const cells = CURRENCIES.map(cur => {
+          const rate = rates[cur.code];
+          const fmt  = (cur.code === 'JPY' || cur.code === 'CNY')
+            ? rate.toFixed(2)
+            : rate.toFixed(4);
+          return `
+            <div class="currency-item">
+              <span class="currency-flag">${cur.flag}</span>
+              <div class="currency-code">${cur.code}</div>
+              <div class="currency-rate">${fmt}</div>
+              <div class="currency-label">per 1 AUD</div>
+            </div>`;
+        });
+
+        body.innerHTML = `<div class="currency-grid">${cells.join('')}</div>`;
+      } catch (err) {
+        console.warn('Currency load failed:', err);
+        body.innerHTML = `
+          <div class="error-state">
+            <div class="error-icon">💱</div>
+            <p class="error-msg">Unable to load exchange rates.<br>Check your connection and try again.</p>
+            <button class="retry-btn" onclick="loadCurrency()">↻ Retry</button>
+          </div>`;
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       PUBLIC HOLIDAYS
+    ═══════════════════════════════════════════ */
+    function buildHolidaysSkeleton() {
+      const row = `
+        <div class="holiday-item" style="opacity:1">
+          <div class="sk" style="width:60px;height:30px;border-radius:6px;flex-shrink:0"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px">
+            <div class="sk" style="height:12px;width:60%"></div>
+            <div class="sk" style="height:9px;width:38%"></div>
+          </div>
+          <div class="sk" style="width:54px;height:20px;border-radius:20px;flex-shrink:0"></div>
+        </div>`;
+      return `<div class="holidays-grid">${row.repeat(6)}</div>`;
+    }
+
+    async function loadHolidays() {
+      const body  = document.getElementById('holidays-body');
+      body.innerHTML = buildHolidaysSkeleton();
+
+      try {
+        const now   = new Date();
+        const year  = now.getFullYear();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        let res      = await fetch(`${HOLIDAYS_API}/${year}/AU`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        let holidays = await res.json();
+
+        // If we're in Nov/Dec also grab next year's holidays
+        if (now.getMonth() >= 10) {
+          try {
+            const nextRes = await fetch(`${HOLIDAYS_API}/${year + 1}/AU`);
+            if (nextRes.ok) holidays = [...holidays, ...await nextRes.json()];
+          } catch (_) {}
+        }
+
+        const upcoming = holidays
+          .map(h => ({ ...h, dateObj: new Date(h.date + 'T00:00:00') }))
+          .filter(h => h.dateObj >= today)
+          .slice(0, 8);
+
+        if (!upcoming.length) throw new Error('No holidays found');
+
+        const items = upcoming.map((h, idx) => {
+          const diff    = Math.round((h.dateObj - today) / 86400000);
+          const cntTxt  = diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : `${diff}d`;
+          const isToday = diff === 0;
+
+          const dateStr = new Intl.DateTimeFormat('en-AU', {
+            weekday: 'short', day: 'numeric', month: 'short',
+          }).format(h.dateObj);
+
+          const national   = !h.counties || h.counties.length === 0 || h.global === true;
+          const scopeLabel = national
+            ? 'National'
+            : h.counties.map(c => c.replace('AU-', '')).join(', ');
+
+          return `
+            <div class="holiday-item" style="animation-delay:${idx * 55}ms">
+              <div class="holiday-countdown${isToday ? ' today' : ''}">${esc(cntTxt)}</div>
+              <div class="holiday-info">
+                <div class="holiday-name">${esc(h.localName || h.name)}</div>
+                <div class="holiday-date">${esc(dateStr)}</div>
+              </div>
+              <div class="holiday-scope${national ? ' national' : ''}">${esc(scopeLabel)}</div>
+            </div>`;
+        });
+
+        body.innerHTML = `<div class="holidays-grid">${items.join('')}</div>`;
+      } catch (err) {
+        console.warn('Holidays load failed:', err);
+        body.innerHTML = `
+          <div class="error-state">
+            <div class="error-icon">📅</div>
+            <p class="error-msg">Unable to load public holidays.<br>Check your connection and try again.</p>
+            <button class="retry-btn" onclick="loadHolidays()">↻ Retry</button>
+          </div>`;
+      }
+    }
+
+    /* ═══════════════════════════════════════════
        REFRESH & AUTO-REFRESH
     ═══════════════════════════════════════════ */
     const refreshBtn = document.getElementById('refresh-btn');
@@ -1195,6 +1620,9 @@
           loadWeather(),
           loadNews(GLOBAL_RSS, 'global-list', false),
           loadNews(AU_RSS,     'au-list',     true),
+          loadCurrency(),
+          loadHolidays(),
+          loadSunTimes(),
         ]);
         stampNow();
       } finally {
